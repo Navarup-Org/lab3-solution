@@ -29,7 +29,6 @@ pipeline{
                         --out "./"
                         --format "ALL"
                         --prettyPrint
-                        --version
                         ''', odcInstallation: 'OWASP-CHECK'
 
                     }
