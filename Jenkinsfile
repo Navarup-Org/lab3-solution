@@ -7,13 +7,35 @@ pipeline{
 
     stages{
 
-        stage('VM node version'){
-            steps {
-                sh '''
-                node -v
-                npm -v
-                '''
+        stage('Installing dependencies'){
+            steps{
+                sh 'npm install --no-audit'
             }
         }
+        stage('Dependencies check'){
+            parallel{
+                stage('Npm audit check'){
+                    steps{
+                        sh'''
+                        npm audit --audit-level=critical
+                        echo$?
+                        '''
+                    }
+                }
+                stage('Owasp dependency check'){
+                    steps{
+                        dependencyCheck additionalArguments: '''
+                        --scan \'./\'
+                        --out \'./\'
+                        --format \'ALL\'
+                        --prettyPrint
+                        --version
+                        ''', odcInstallation: 'OWASP-CHECK'
+
+                    }
+                }
+            }
+        }
+        
     }
 }
