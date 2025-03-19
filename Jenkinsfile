@@ -29,6 +29,7 @@ pipeline{
                         --out "./"
                         --format "ALL"
                         --prettyPrint
+                        --data "/var/lib/jenkins/owasp-data"
                         ''', odcInstallation: 'OWASP-CHECK'
 
                     }
