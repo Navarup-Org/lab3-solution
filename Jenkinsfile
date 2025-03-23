@@ -17,13 +17,13 @@ pipeline {
                     steps {
                         sh '''
                         npm audit --audit-level=critical
-                        echo $?
+                        echo $? 
                         '''
                     }
                 }
                 stage('Owasp dependency check') {
                     steps {
-                        withEnv(["NVD_API_KEY=${credentials('NVD_API_KEY')}"]) {
+                        withEnv(["NVD_API_KEY=550c72a8-466a-45f6-85b3-24fd0508caa5"]) {
                             dependencyCheck additionalArguments: '''
                             --scan "./"
                             --out "./"
