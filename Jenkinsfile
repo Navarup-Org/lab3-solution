@@ -5,6 +5,10 @@ pipeline {
         nodejs 'nodejs-23.9.0'
     }
 
+    environment {
+        JAVA_OPTS = "-Xmx4g"  // Increase heap size to 4GB
+    }
+
     stages {
         stage('Installing dependencies') {
             steps {
@@ -24,13 +28,14 @@ pipeline {
                 stage('Owasp dependency check') {
                     steps {
                         withEnv(["NVD_API_KEY=550c72a8-466a-45f6-85b3-24fd0508caa5"]) {
-                            dependencyCheck additionalArguments: '''
-                            --scan "./"
-                            --out "./"
-                            --format "ALL"
-                            --prettyPrint
-                            --nvdApiKey $NVD_API_KEY
-                            ''', odcInstallation: 'OWASP-CHECK'
+                            sh '''
+                            export JAVA_OPTS="-Xmx4g"
+                            dependencyCheck --scan "./" \
+                                           --out "./" \
+                                           --format "ALL" \
+                                           --prettyPrint \
+                                           --nvdApiKey $NVD_API_KEY
+                            '''
                         }
                     }
                 }
