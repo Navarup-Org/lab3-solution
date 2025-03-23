@@ -24,14 +24,13 @@ pipeline {
                 stage('Owasp dependency check') {
                     steps {
                         withEnv(["NVD_API_KEY=550c72a8-466a-45f6-85b3-24fd0508caa5"]) {
-                            sh '''
-                            sudo -u jenkins /var/lib/jenkins/tools/org.jenkinsci.plugins.DependencyCheck.tools.DependencyCheckInstallation/OWASP-CHECK/bin/dependency-check.sh \
-                            --scan "./" \
-                            --out "./" \
-                            --format "ALL" \
-                            --prettyPrint \
+                            dependencyCheck additionalArguments: '''
+                            --scan "./"
+                            --out "./"
+                            --format "ALL"
+                            --prettyPrint
                             --nvdApiKey $NVD_API_KEY
-                            '''
+                            ''', odcInstallation: 'OWASP-CHECK'
                         }
                     }
                 }
