@@ -16,17 +16,34 @@ pipeline {
             }
         }
 
-        stage('Owasp dependency check') {
-            steps {
-                withEnv(["JAVA_OPTS=-Xmx4g -Xms512m"]) {
-                    dependencyCheck additionalArguments: '''
-                    --scan "./"
-                    --out "./dependency-check-report"
-                    --format "ALL"
-                    --prettyPrint
-                    --failOnCVSS 7
-                    --noupdate
-                    ''', odcInstallation: 'OWASP-CHECK'
+        stage('Security Checks') {
+            parallel {
+                stage('Npm audit check') {
+                    steps {
+                        script {
+                            def auditResult = sh(script: 'npm audit --json', returnStdout: true).trim()
+                            if (auditResult.contains('"critical"')) {
+                                error("❌ Critical vulnerabilities found in NPM dependencies!")
+                            } else {
+                                echo "✅ No critical vulnerabilities detected in NPM packages."
+                            }
+                        }
+                    }
+                }
+
+                stage('Owasp dependency check') {
+                    steps {
+                        withEnv(["JAVA_OPTS=-Xmx4g -Xms512m"]) {
+                            dependencyCheck additionalArguments: '''
+                            --scan "./"
+                            --out "./dependency-check-report"
+                            --format "ALL"
+                            --prettyPrint
+                            --failOnCVSS 7
+                            --noupdate
+                            ''', odcInstallation: 'OWASP-CHECK'
+                        }
+                    }
                 }
             }
         }
