@@ -17,6 +17,12 @@ pipeline {
             }
         }
 
+        stage('Auto-fix NPM vulnerabilities') {
+            steps {
+                sh 'npm audit fix || true'
+            }
+        }
+
         stage('Purge OWASP Dependency-Check DB') {
             steps {
                 sh 'rm -rf ~/.dependency-check/data/* || true'
@@ -46,7 +52,7 @@ pipeline {
                             --out "./dependency-check-report"
                             --format "ALL"
                             --prettyPrint
-                            --disableCvssV4
+                            --failOnCVSS 7
                             --nvdApiKey $NVD_API_KEY
                             ''', odcInstallation: 'OWASP-CHECK'
                         }
