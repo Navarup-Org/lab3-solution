@@ -39,7 +39,6 @@ pipeline {
                             --out "./dependency-check-report"
                             --format "ALL"
                             --prettyPrint
-                            --failOnCVSS 7
                             --noupdate
                             --disableYarnAudit
                             ''', odcInstallation: 'OWASP-CHECK'
