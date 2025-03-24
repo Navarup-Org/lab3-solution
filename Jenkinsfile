@@ -17,12 +17,6 @@ pipeline {
             }
         }
 
-        stage('Auto-fix NPM vulnerabilities') {
-            steps {
-                sh 'npm audit fix || true'
-            }
-        }
-
         stage('Purge OWASP Dependency-Check DB') {
             steps {
                 sh 'rm -rf ~/.dependency-check/data/* || true'
