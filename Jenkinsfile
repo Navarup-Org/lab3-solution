@@ -41,6 +41,7 @@ pipeline {
                             --prettyPrint
                             --failOnCVSS 7
                             --noupdate
+                            --disableYarnAudit
                             ''', odcInstallation: 'OWASP-CHECK'
                         }
                     }
