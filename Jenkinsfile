@@ -42,7 +42,8 @@ pipeline {
                             --noupdate
                             --disableYarnAudit
                             ''', odcInstallation: 'OWASP-CHECK'
-                            dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report.xml', stopBuild: true
+                            dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report/dependency-check-report.xml', stopBuild: true
+
                         }
                     }
                 }
