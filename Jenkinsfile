@@ -21,12 +21,9 @@ pipeline {
                 stage('Npm audit check') {
                     steps {
                         script {
-                            def auditResult = sh(script: 'npm audit --json', returnStdout: true).trim()
-                            if (auditResult.contains('"critical"')) {
-                                error("❌ Critical vulnerabilities found in NPM dependencies!")
-                            } else {
-                                echo "✅ No critical vulnerabilities detected in NPM packages."
-                            }
+                            // Run npm audit and fail only if critical vulnerabilities are found
+                            sh 'npm audit --audit-level=critical'
+                            echo "✅ No critical vulnerabilities detected in NPM packages."
                         }
                     }
                 }
@@ -43,7 +40,6 @@ pipeline {
                             --disableYarnAudit
                             ''', odcInstallation: 'OWASP-CHECK'
                             dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report/dependency-check-report.xml', stopBuild: true
-
                         }
                     }
                 }
