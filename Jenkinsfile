@@ -4,12 +4,10 @@ pipeline {
     tools {
         nodejs 'nodejs-23.9.0'
     }
-    environment {
-        MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
-    }
 
     environment {
         JAVA_OPTS = "-Xmx4g -Xms512m"
+        MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
     }
 
     stages {
