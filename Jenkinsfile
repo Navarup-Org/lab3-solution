@@ -58,10 +58,11 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'mongo-db-cred', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
                 sh 'npm test'
 
-                    }
-            }
+                }
+            
                 
                 junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml'
-                }
+            }
+        }
     }
 }
