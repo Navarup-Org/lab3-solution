@@ -4,6 +4,9 @@ pipeline {
     tools {
         nodejs 'nodejs-23.9.0'
     }
+    environment {
+        MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
+    }
 
     environment {
         JAVA_OPTS = "-Xmx4g -Xms512m"
@@ -52,9 +55,12 @@ pipeline {
         }
         stage('Unit Testing') {
             steps {
+                withCredentials([usernamePassword(credentialsId: 'mongo-db-cred', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
                 sh 'npm test'
 
                     }
+                
+                junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml'
                 }
     }
 }
