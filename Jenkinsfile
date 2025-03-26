@@ -59,6 +59,7 @@ pipeline {
                 sh 'npm test'
 
                     }
+            }
                 
                 junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml'
                 }
