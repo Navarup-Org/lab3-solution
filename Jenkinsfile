@@ -83,12 +83,9 @@ pipeline {
 
     post {
         always {
-            junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-report/dependency-check-junit.xml'
-
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'dependency-check-report', reportFiles: 'dependency-check-jenkins.html', reportName: 'HTML Report-dependency check', reportTitles: '', useWrapperFileDirectly: true])
-
             junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml'
-
+            junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-report/dependency-check-junit.xml'
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'dependency-check-report', reportFiles: 'dependency-check-jenkins.html', reportName: 'HTML Report-dependency check', reportTitles: '', useWrapperFileDirectly: true])
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Coverage test report', reportTitles: '', useWrapperFileDirectly: true])
             
 
