@@ -9,7 +9,7 @@ pipeline {
         JAVA_OPTS = "-Xmx4g -Xms512m"
         MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
         MONGO_DB_CREDS = credentials('mongo-db-cred')
-        MONGO_USERNAME = credentials('mondo-db-usrname')
+        MONGO_USERNAME = credentials('mongo-db-usrname')
         MONGO_PASSWORD = credentials('mongo-db-pwd')
 
     }
