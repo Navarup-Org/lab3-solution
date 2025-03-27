@@ -8,6 +8,10 @@ pipeline {
     environment {
         JAVA_OPTS = "-Xmx4g -Xms512m"
         MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
+        MONGO_DB_CREDS = credentials('mongo-db-cred')
+        MONGO_USERNAME = credentials('mondo-db-usrname')
+        MONGO_PASSWORD = credentials('mongo-db-pwd')
+
     }
 
     stages {
@@ -53,11 +57,10 @@ pipeline {
         }
         stage('Unit Testing') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'mongo-db-cred', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+
+                sh 'echo $MONGO_DB_CREDS'
                 sh 'npm test'
 
-                }
-            
                 
                 junit allowEmptyResults: true, keepProperties: true, testResults: 'test-results.xml'
             }
@@ -65,15 +68,15 @@ pipeline {
 
         stage('Code coverage') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'mongo-db-cred', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {
+                
                   
-                  catchError(buildResult: 'SUCCESS', message: 'It will be fixed in future releases!!!!!!!!!!!!!', stageResult: 'UNSTABLE') {
+                catchError(buildResult: 'SUCCESS', message: 'It will be fixed in future releases!!!!!!!!!!!!!', stageResult: 'UNSTABLE') {
   
                     sh 'npm run coverage'
-                  }
+                }
                 publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Coverage test report', reportTitles: '', useWrapperFileDirectly: true])
 
-                }
+                
             }
         }
     }
