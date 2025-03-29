@@ -76,6 +76,7 @@ pipeline {
                         -Dsonar.projectKey=devops-project \
                         -Dsonar.sources=app.js \
                         -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info \
                         -Dsonar.login=sqp_e66bee4008ea670d58de75d274b1d5df99eb6131
                     '''
             }
