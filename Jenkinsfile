@@ -43,11 +43,9 @@ pipeline {
                             --noupdate
                             --disableYarnAudit
                             ''', odcInstallation: 'OWASP-CHECK'
-                            dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report/dependency-check-reportxml', stopBuild: true
+                            dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report/dependency-check-reportxml', stopBuild: tru
 
-                            junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-report/dependency-check-junit.xml'
-
-                            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'dependency-check-report', reportFiles: 'dependency-check-jenkins.html', reportName: 'HTML Report-dependency check', reportTitles: '', useWrapperFileDirectly: true])
+                            
                         }
                     }
                 }
