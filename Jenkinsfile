@@ -12,7 +12,6 @@ pipeline {
         MONGO_USERNAME = credentials('mongo-db-usrname')
         MONGO_PASSWORD = credentials('mongo-db-pwd')
         SONAR_SCANNER = tool 'sonarqube-scanner'
-
     }
 
     stages {
@@ -27,7 +26,6 @@ pipeline {
                 stage('Npm audit check') {
                     steps {
                         script {
-                            // Run npm audit and fail only if critical vulnerabilities are found
                             sh 'npm audit --audit-level=critical'
                             echo "✅ No critical vulnerabilities detected in NPM packages."
                         }
@@ -50,40 +48,30 @@ pipeline {
                             junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-report/dependency-check-junit.xml'
 
                             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'dependency-check-report', reportFiles: 'dependency-check-jenkins.html', reportName: 'HTML Report-dependency check', reportTitles: '', useWrapperFileDirectly: true])
-
                         }
                     }
                 }
             }
         }
+
         stage('Unit Testing') {
             steps {
-
                 sh 'echo $MONGO_DB_CREDS'
                 sh 'npm test'
-
-                
-                
             }
         }
 
         stage('Code coverage') {
             steps {
-                
-                  
                 catchError(buildResult: 'SUCCESS', message: 'It will be fixed in future releases!!!!!!!!!!!!!', stageResult: 'UNSTABLE') {
-  
                     sh 'npm run coverage'
                 }
-                
-
-                
             }
         }
 
         stage('SAST-SonarQube') {
             steps {
-                sh ' echo $SONAR_SCANNER'
+                sh 'echo $SONAR_SCANNER'
 
                 sh '''
                     $SONAR_SCANNER/bin/sonar-scanner \
@@ -94,6 +82,7 @@ pipeline {
                     '''
             }
         }
+    }
 
     post {
         always {
@@ -101,9 +90,6 @@ pipeline {
             junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-report/dependency-check-junit.xml'
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'dependency-check-report', reportFiles: 'dependency-check-jenkins.html', reportName: 'HTML Report-dependency check', reportTitles: '', useWrapperFileDirectly: true])
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Coverage test report', reportTitles: '', useWrapperFileDirectly: true])
-            
-
-    // One or more steps need to be included within each condition's block.
         }
     }
 }
