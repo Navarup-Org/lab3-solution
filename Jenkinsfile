@@ -80,7 +80,6 @@ pipeline {
                 
             }
         }
-    }
 
         stage('SAST-SonarQube') {
             steps {
