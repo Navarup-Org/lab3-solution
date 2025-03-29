@@ -11,6 +11,7 @@ pipeline {
         MONGO_DB_CREDS = credentials('mongo-db-cred')
         MONGO_USERNAME = credentials('mongo-db-usrname')
         MONGO_PASSWORD = credentials('mongo-db-pwd')
+        SONAR_SCANNER = tool 'sonarqube-scanner'
 
     }
 
@@ -80,6 +81,20 @@ pipeline {
             }
         }
     }
+
+        stage('SAST-SonarQube') {
+            steps {
+                sh ' echo $SONAR_SCANNER'
+
+                sh '''
+                    $SONAR_SCANNER/bin/sonar-scanner \
+                        -Dsonar.projectKey=devops-project \
+                        -Dsonar.sources=app.js \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=sqp_e66bee4008ea670d58de75d274b1d5df99eb6131
+                    '''
+            }
+        }
 
     post {
         always {
