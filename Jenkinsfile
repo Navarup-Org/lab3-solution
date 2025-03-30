@@ -71,16 +71,19 @@ pipeline {
 
         stage('SAST-SonarQube') {
             steps {
-                sh 'echo $SONAR_SCANNER'
+                timeout(time: 80, unit: 'SECONDS') {
+                    withSonarQubeEnv('Sonar-Qube-Server') {
+                        sh 'echo $SONAR_SCANNER'
 
-                sh '''
-                    $SONAR_SCANNER/bin/sonar-scanner \
-                        -Dsonar.projectKey=devops-project \
-                        -Dsonar.sources=app.js \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info \
-                        -Dsonar.login=sqp_e66bee4008ea670d58de75d274b1d5df99eb6131
-                    '''
+                        sh '''
+                            $SONAR_SCANNER/bin/sonar-scanner \
+                                -Dsonar.projectKey=devops-project \
+                                -Dsonar.sources=app.js \
+                                -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info \
+                            '''
+                    }
+                waitForQualityGate abortPipeline: true
+                }
             }
         }
     }
