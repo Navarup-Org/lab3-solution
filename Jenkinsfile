@@ -27,7 +27,7 @@ pipeline {
                     steps {
                         script {
                             sh 'npm audit --audit-level=critical'
-                            echo "✅ No critical vulnerabilities detected in NPM packages."
+                            echo "✅ No critical vulnerabilities detected in NPM packages ********."
                         }
                     }
                 }
