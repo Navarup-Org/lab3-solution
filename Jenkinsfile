@@ -87,9 +87,11 @@ pipeline {
             }
         }
         stage('Docker Build') {
+            steps {
 
-            sh 'printenv'
-            sh 'docker build -t navarup/solar-system:$GIT_COMMIT .'
+                sh 'printenv'
+                sh 'docker build -t navarup/solar-system:$GIT_COMMIT .'
+            }
         }
     }
 
