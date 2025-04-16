@@ -93,6 +93,13 @@ pipeline {
                 sh 'docker build -t navarup/solar-system:$GIT_COMMIT .'
             }
         }
+        stage('Docker Push') {
+            steps {
+                withDockerRegistry(credentialsId: 'dockerhub-cred', url: 'https://index.docker.io/v1/') {
+                    sh 'docker push navarup/solar-system:$GIT_COMMIT'
+                }
+            }
+        }
     }
 
     post {
